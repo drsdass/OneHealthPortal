@@ -268,50 +268,40 @@ const initialHardcodedUsers = [
 ];
 
 // --- Firebase Initialization (Global Configuration Variables) ---
-// These variables define the Firebase project settings and the application's unique ID for Firestore paths.
 let firebaseConfig = {};
-let globalAppId = 'my-healthcare-app-1'; // Default application ID for Firestore paths (e.g., Render service name or local identifier)
+let globalAppId = 'my-healthcare-app-1'; // Default application ID
 
-// Check if running in Canvas environment (where __firebase_config is defined)
-if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-  try {
-    // Attempt to parse Firebase config from Canvas global variable
-    firebaseConfig = JSON.parse(__firebase_config);
-    // Use __app_id from Canvas if available, otherwise fallback to the hardcoded default globalAppId
-    globalAppId = typeof __app_id !== 'undefined' ? __app_id : globalAppId;
-    console.log("Firebase config from Canvas environment:", firebaseConfig);
-    console.log("App ID from Canvas environment:", globalAppId);
-  } catch (e) {
-    console.error("Error parsing __firebase_config in Canvas environment:", e);
-    // Fallback to the provided hardcoded config if parsing fails in Canvas, and log a warning.
-    // The application should still attempt to run with these explicit settings.
+// Logic to load config: 1. Render Env Vars, 2. Canvas Vars, 3. Hardcoded
+if (process.env.REACT_APP_FIREBASE_CONFIG) {
+    // 1. Load from Render's Environment Variables (recommended for production)
+    try {
+        firebaseConfig = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
+        globalAppId = process.env.REACT_APP_APP_ID || globalAppId;
+        console.log("Firebase config loaded from production environment variables.");
+    } catch (e) {
+        console.error("Error parsing REACT_APP_FIREBASE_CONFIG from environment variables:", e);
+    }
+} else if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+    // 2. Load from Canvas environment for development
+    try {
+        firebaseConfig = JSON.parse(__firebase_config);
+        globalAppId = typeof __app_id !== 'undefined' ? __app_id : globalAppId;
+        console.log("Firebase config loaded from Canvas environment.");
+    } catch (e) {
+        console.error("Error parsing __firebase_config in Canvas environment:", e);
+    }
+} else {
+    // 3. Fallback to hardcoded config for local development if others fail
     firebaseConfig = {
         apiKey: "AIzaSyB6pb1l277vaRBNSZk37lpKbzqsO4k4s7M",
         authDomain: "onehealth-a1751.firebaseapp.com",
         projectId: "onehealth-a1751",
         storageBucket: "onehealth-a1751.firebasestorage.app",
         messagingSenderId: "155326349181",
-        appId: "1:155326349181:web:eef3e2cd74053626ddd614", // Firebase's appId for a web app
-        measurementId: "G-5T3MQX7ZXX" // Optional
+        appId: "1:155326349181:web:eef3e2cd74053626ddd614",
+        measurementId: "G-5T3MQX7ZXX"
     };
-    console.warn("Using hardcoded Firebase config due to error parsing Canvas __firebase_config. Please ensure __firebase_config is valid JSON.");
-  }
-} else {
-  // If not in Canvas environment (e.g., local development or external deployment),
-  // use the provided hardcoded Firebase configuration directly.
-  // For actual production deployments, these values should ideally be managed via
-  // environment variables (e.g., REACT_APP_FIREBASE_API_KEY in a .env file on your hosting platform).
-  firebaseConfig = {
-    apiKey: "AIzaSyB6pb1l277vaRBNSZk37lpKbzqsO4k4s7M",
-    authDomain: "onehealth-a1751.firebaseapp.com",
-    projectId: "onehealth-a1751",
-    storageBucket: "onehealth-a1751.firebasestorage.app",
-    messagingSenderId: "155326349181",
-    appId: "1:155326349181:web:eef3e2cd74053626ddd614", // Firebase's appId for a web app
-    measurementId: "G-5T3MQX7ZXX" // Optional
-  };
-  console.log("Firebase config hardcoded for local/external environment.");
-  console.log("App ID for local/external environment:", globalAppId);
+    console.log("Using hardcoded Firebase config as a fallback.");
 }
 
 
