@@ -401,9 +401,9 @@ const AuthProvider = ({ children }) => {
     };
   }, [app, db, auth]); // REVERTED: Depend on 'app', 'db', and 'auth' state to run this effect when they are set
 
-  // Effect to fetch all users from Firestore once DB is ready
+  // Effect to fetch all users from Firestore once DB is ready and user is authenticated
   useEffect(() => {
-    if (db && isAuthReady && auth && auth.currentUser) {
+    if (db && isAuthReady && auth?.currentUser) {
       const fetchAllUsers = async () => {
         try {
           const usersColRef = collection(db, `artifacts/${currentAppId}/public/data/users`);
@@ -412,28 +412,10 @@ const AuthProvider = ({ children }) => {
           const fetchedUsers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setAllUsersFromFirestore(fetchedUsers);
           console.log("All users fetched from Firestore:", fetchedUsers);
-
-          // If no users in Firestore, seed with hardcoded ones.
-          // This block is commented out to prevent client-side write errors due to Firestore rules.
-          // The app will fall back to the hardcoded list if the fetch is empty.
-          /*
-          if (fetchedUsers.length === 0) {
-            console.log("No users found in Firestore. Seeding with initial hardcoded users.");
-            const addPromises = initialHardcodedUsers.map(user =>
-              addDoc(usersColRef, { ...user, createdAt: serverTimestamp() })
-            );
-            await Promise.all(addPromises);
-            console.log("Hardcoded users seeded to Firestore.");
-            // Re-fetch after seeding
-            const reFetchedUsersSnapshot = await getDocs(q);
-            const reFetchedUsers = reFetchedUsersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setAllUsersFromFirestore(reFetchedUsers);
-          }
-          */
-
         } catch (error) {
           console.error("Error fetching or seeding users from Firestore:", error);
-          // Set an error but allow the app to continue, potentially falling back to hardcoded users if login logic handles it.
+          setErrorMessage("Could not load user data from the database. The application may fall back to a default user list.");
+          setShowModal(true);
         }
       };
       fetchAllUsers();
@@ -443,18 +425,17 @@ const AuthProvider = ({ children }) => {
 
   const login = (credentials, loginType) => {
     let userFound = null;
+    let userSource = allUsersFromFirestore.length > 0 ? allUsersFromFirestore : initialHardcodedUsers;
 
-    // First, try to find user in Firestore data
-    if (allUsersFromFirestore.length > 0) {
-      if (loginType === 'admin' || loginType === 'sales') {
+    if (loginType === 'admin' || loginType === 'sales') {
         const { username, password } = credentials;
-        userFound = allUsersFromFirestore.find(u =>
+        userFound = userSource.find(u =>
           (u.role === 'admin' || u.role === 'sales') && u.username === username && u.password === password
         );
       } else if (loginType === 'patient') {
         const { lastName, ssnLast4, phoneNumber } = credentials;
         const normalizedPhoneNumber = phoneNumber.replace(/\D/g, '');
-        userFound = allUsersFromFirestore.find(u =>
+        userFound = userSource.find(u =>
           u.role === 'patient' &&
           u.lastName?.toLowerCase() === lastName?.toLowerCase() &&
           u.ssnLast4 === ssnLast4 &&
@@ -462,36 +443,10 @@ const AuthProvider = ({ children }) => {
         );
       } else if (loginType === 'physician') {
         const { email, password } = credentials;
-        userFound = allUsersFromFirestore.find(u =>
+        userFound = userSource.find(u =>
           u.role === 'physician' && u.email === email && u.password === password
         );
       }
-    }
-
-    // If not found in Firestore, fallback to initial hardcoded users (only if Firestore data is empty or fetch failed)
-    if (!userFound && allUsersFromFirestore.length === 0) {
-      console.log("User not found in Firestore or Firestore empty. Falling back to hardcoded users.");
-      if (loginType === 'admin') {
-        const { username, password } = credentials;
-        userFound = initialHardcodedUsers.find(u => u.role === 'admin' && u.username === username && u.password === password);
-      } else if (loginType === 'sales') {
-          const { username, password } = credentials;
-          userFound = initialHardcodedUsers.find(u => u.role === 'sales' && u.username === username && u.password === password);
-      }
-      else if (loginType === 'patient') {
-        const { lastName, ssnLast4, phoneNumber } = credentials;
-        const normalizedPhoneNumber = phoneNumber.replace(/\D/g, '');
-        userFound = initialHardcodedUsers.find(u =>
-          u.role === 'patient' &&
-          u.lastName.toLowerCase() === lastName.toLowerCase() &&
-          u.ssnLast4 === ssnLast4 &&
-          u.phoneNumber === normalizedPhoneNumber
-        );
-      } else if (loginType === 'physician') {
-        const { email, password } = credentials;
-        userFound = initialHardcodedUsers.find(u => u.role === 'physician' && u.email === email && u.password === password);
-      }
-    }
 
     if (userFound) {
       console.log(`Login successful for user: ${userFound.username || userFound.email || userFound.lastName}`);
@@ -1143,7 +1098,7 @@ const SalesMarketing = () => {
 
   // 1. Fetch all sales data on component mount
   useEffect(() => {
-    if (!db || !isAuthReady || !auth || !auth.currentUser) {
+    if (!db || !isAuthReady || !auth || !currentUser) {
       return;
     }
 
@@ -1169,7 +1124,7 @@ const SalesMarketing = () => {
     };
 
     fetchSalesData();
-  }, [db, isAuthReady, appId, auth]);
+  }, [db, isAuthReady, appId, auth, currentUser]);
 
   // 2. Apply filters whenever raw data or filter selections change
   useEffect(() => {
@@ -1390,8 +1345,7 @@ const MonthlyBonusReport = ({ entity }) => {
 
   useEffect(() => {
     // Ensure db and auth are ready
-    if (!db || !isAuthReady || !auth || !auth.currentUser) { // Added auth and auth.currentUser check for explicit debugging
-      console.log("MonthlyBonusReport: DB, Auth, currentUser, or isAuthReady not ready/available for fetch. Current user:", auth?.currentUser?.uid, "Is Auth Ready:", isAuthReady);
+    if (!db || !isAuthReady || !auth || !currentUser) { // Added currentUser to dependency
       return;
     }
 
@@ -1504,7 +1458,7 @@ const MonthlyBonusReport = ({ entity }) => {
       setSalesData([]); // Clear sales data as well
       setLoading(false);
     }
-  }, [db, isAuthReady, appId, entity, selectedYear, auth]); // Re-fetch when db, auth status, appId, selected entity, selectedYear, or auth instance changes
+  }, [db, isAuthReady, appId, entity, selectedYear, auth, currentUser]); // Added currentUser to dependency
 
 
   const downloadCsv = () => {
