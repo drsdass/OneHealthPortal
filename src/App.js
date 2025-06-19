@@ -1332,7 +1332,7 @@ const SalesMarketing = () => {
 
 // --- MonthlyBonusReport ---
 const MonthlyBonusReport = ({ entity }) => {
-  const { db, isAuthReady, appId, auth } = useAuth(); // Access db, appId, and auth from AuthContext
+  const { currentUser, db, isAuthReady, appId, auth } = useAuth(); // Added currentUser
   const [bonusData, setBonusData] = useState([]);
   const [salesData, setSalesData] = useState([]); // New state for sales data
   const [loading, setLoading] = useState(true);
@@ -3165,3 +3165,4 @@ export default function App() {
     </AuthProvider>
   );
 }
+
