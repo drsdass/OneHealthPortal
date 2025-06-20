@@ -1764,16 +1764,7 @@ const SalesMarketing = () => {
             </div>
         </div>
         
-        {/* CPT Code Finder Toggle and Component */}
-        <div className="mt-6">
-            <button
-                onClick={() => setActiveTool(activeTool === 'cpt' ? '' : 'cpt')}
-                className="w-full text-left p-4 bg-sky-100 hover:bg-sky-200 rounded-md text-xl font-semibold text-sky-800 transition-colors"
-            >
-                {activeTool === 'cpt' ? 'Hide' : 'Show'} CPT Code Finder
-            </button>
-            {activeTool === 'cpt' && <CptCodeFinder />}
-        </div>
+        {/* CPT Code Finder is now a modal, so it's removed from here */}
       </div>
     </div>
   );
