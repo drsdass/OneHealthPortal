@@ -1,6 +1,6 @@
+// src/components/PhysicianProvider.js
 import React from 'react';
 
-// --- PhysicianProvider ---
 const PhysicianProvider = () => {
   return (
     <div className="p-8 bg-white rounded-lg shadow-md w-full min-h-[500px]"> {/* Standardized height/width */}
