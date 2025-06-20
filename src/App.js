@@ -936,89 +936,523 @@ const FinancialsReport = ({ entity }) => {
 // --- CPT Code Data ---
 const cptCodeData = [
   {
+      cpt: '80047',
+      description: 'Basic metabolic panel (Calcium, ionized)',
+      category: 'Chemistry',
+      diagnosisCodes: 'E83.52 (Hypercalcemia), R74.8 (Abnormal levels of other serum enzymes)',
+      details: 'Measures calcium, carbon dioxide, chloride, creatinine, glucose, potassium, sodium, and urea nitrogen (BUN) with ionized calcium.'
+  },
+  {
       cpt: '80048',
-      description: 'Basic Metabolic Panel (BMP)',
-      diagnosisCodes: 'E86.0, R79.89, E87.1',
-      details: 'This panel measures glucose, calcium, and electrolytes. It is crucial for monitoring blood sugar levels, kidney function, and hydration status, helping to diagnose conditions like diabetes and kidney disease.'
+      description: 'Basic Metabolic Panel (BMP) (Calcium, total)',
+      category: 'Chemistry',
+      diagnosisCodes: 'E86.0 (Dehydration), R73.03 (Prediabetes), I10 (Hypertension)',
+      details: 'Checks kidney status, blood sugar, and electrolyte/fluid balance.'
   },
   {
       cpt: '80053',
       description: 'Comprehensive Metabolic Panel (CMP)',
-      diagnosisCodes: 'R74.0, K76.0, E11.9',
-      details: 'A more extensive panel that includes the BMP and also tests liver function (ALT, AST, alkaline phosphatase, bilirubin) and protein levels (albumin, total protein). It provides a broad overview of the body\'s chemical balance and metabolism.'
+      category: 'Chemistry',
+      diagnosisCodes: 'K74.60 (Cirrhosis of liver), E11.9 (Type 2 diabetes), Z00.00 (General adult medical exam)',
+      details: 'Broader panel than BMP, includes liver function tests (ALT, AST, ALP, Bilirubin).'
+  },
+  {
+      cpt: '80061',
+      description: 'Lipid Panel',
+      category: 'Chemistry',
+      diagnosisCodes: 'E78.2 (Mixed hyperlipidemia), Z13.220 (Screening for lipid disorders)',
+      details: 'Assesses cardiovascular risk by measuring total cholesterol, HDL, LDL, and triglycerides.'
+  },
+  {
+      cpt: '80069',
+      description: 'Renal function panel',
+      category: 'Chemistry',
+      diagnosisCodes: 'N18.9 (Chronic kidney disease, unspecified), I12.9 (Hypertensive CKD)',
+      details: 'Evaluates kidney function with tests like albumin, calcium, CO2, chloride, creatinine, glucose, phosphorus, potassium, sodium, BUN.'
+  },
+  {
+      cpt: '80074',
+      description: 'Acute hepatitis panel',
+      category: 'Chemistry',
+      diagnosisCodes: 'B19.9 (Unspecified viral hepatitis), R17 (Unspecified jaundice)',
+      details: 'Tests for acute hepatitis, including Hepatitis A, Hepatitis B (surface antigen, core antibody), and Hepatitis C antibody.'
+  },
+  {
+      cpt: '80076',
+      description: 'Hepatic function panel',
+      category: 'Chemistry',
+      diagnosisCodes: 'K76.0 (Fatty liver), R94.5 (Abnormal results of liver function studies)',
+      details: 'Evaluates liver function with tests like ALT, AST, ALP, albumin, total and direct bilirubin.'
+  },
+  {
+      cpt: '82040',
+      description: 'Albumin; serum, plasma or whole blood',
+      category: 'Chemistry',
+      diagnosisCodes: 'E88.09 (Other disorder of plasma-protein metabolism), K70.30 (Alcoholic cirrhosis of liver without ascites)',
+      details: 'Measures the amount of albumin in the blood.'
+  },
+  {
+      cpt: '82043',
+      description: 'Albumin; urine, microalbumin, quantitative',
+      category: 'Chemistry',
+      diagnosisCodes: 'E11.22 (Type 2 diabetes with diabetic chronic kidney disease), I12.9 (Hypertensive CKD)',
+      details: 'Screens for early kidney damage, especially in diabetic or hypertensive patients.'
+  },
+  {
+      cpt: '82140',
+      description: 'Ammonia',
+      category: 'Chemistry',
+      diagnosisCodes: 'K72.90 (Hepatic failure, unspecified without coma)',
+      details: 'Measures ammonia levels to investigate severe liver disease and certain genetic urea cycle disorders.'
+  },
+  {
+      cpt: '82306',
+      description: 'Vitamin D; 25-hydroxy, includes fraction(s), if performed',
+      category: 'Chemistry',
+      diagnosisCodes: 'E55.9 (Vitamin D deficiency, unspecified)',
+      details: 'Measures Vitamin D levels to check for deficiency.'
+  },
+  {
+      cpt: '82378',
+      description: 'Carcinoembryonic antigen (CEA)',
+      category: 'Chemistry',
+      diagnosisCodes: 'C18.9 (Malignant neoplasm of colon), Z85.46 (Personal hx of colon cancer)',
+      details: 'A tumor marker used to monitor certain cancers, especially colorectal cancer.'
+  },
+  {
+      cpt: '82570',
+      description: 'Creatinine; other source',
+      category: 'Chemistry',
+      diagnosisCodes: 'N18.3 (Chronic kidney disease, stage 3)',
+      details: 'Measures creatinine level in fluids other than blood or urine.'
+  },
+  {
+      cpt: '82607',
+      description: 'Cyanocobalamin (Vitamin B-12)',
+      category: 'Chemistry',
+      diagnosisCodes: 'D51.9 (Vitamin B12 deficiency anemia, unspecified), K90.0 (Celiac disease)',
+      details: 'Measures Vitamin B-12 levels to diagnose deficiency.'
+  },
+  {
+      cpt: '82728',
+      description: 'Ferritin',
+      category: 'Chemistry',
+      diagnosisCodes: 'D50.9 (Iron deficiency anemia), E83.119 (Hemochromatosis)',
+      details: 'Measures the amount of stored iron in the body.'
+  },
+  {
+      cpt: '82746',
+      description: 'Folic acid; serum',
+      category: 'Chemistry',
+      diagnosisCodes: 'D52.9 (Folate deficiency anemia, unspecified)',
+      details: 'Measures the level of folic acid in the blood.'
+  },
+  {
+      cpt: '82947',
+      description: 'Glucose; quantitative, blood',
+      category: 'Chemistry',
+      diagnosisCodes: 'R73.03 (Prediabetes), E11.9 (Type 2 diabetes)',
+      details: 'Measures the amount of glucose in the blood at a specific time.'
   },
   {
       cpt: '83036',
-      description: 'Hemoglobin A1c (HbA1c)',
-      diagnosisCodes: 'E11.65, E10.65, R73.03',
-      details: 'Measures the average blood sugar level over the past 2 to 3 months by assessing the percentage of hemoglobin coated with sugar. It is a key test for diagnosing and managing type 1 and type 2 diabetes.'
+      description: 'Hemoglobin; glycosylated (A1c)',
+      category: 'Chemistry',
+      diagnosisCodes: 'E11.65 (Type 2 diabetes with hyperglycemia), R73.09 (Other abnormal glucose)',
+      details: 'Provides an average of blood sugar control over 2-3 months.'
   },
   {
-      cpt: '85025',
-      description: 'Complete Blood Count (CBC) with Differential',
-      diagnosisCodes: 'D64.9, D72.819, C95.90',
-      details: 'Provides a count of all blood cell types (red cells, white cells, platelets) and the percentages of each type of white blood cell. It is used to detect a wide range of disorders, including anemia, infection, and leukemia.'
+      cpt: '83735',
+      description: 'Magnesium',
+      category: 'Chemistry',
+      diagnosisCodes: 'E83.42 (Hypomagnesemia)',
+      details: 'Measures the level of magnesium in the blood.'
+  },
+  {
+      cpt: '83880',
+      description: 'Natriuretic peptide (BNP)',
+      category: 'Chemistry',
+      diagnosisCodes: 'I50.9 (Heart failure, unspecified), R06.02 (Shortness of breath)',
+      details: 'Helps diagnose and assess the severity of heart failure.'
+  },
+  {
+      cpt: '84100',
+      description: 'Phosphorus inorganic (phosphate);',
+      category: 'Chemistry',
+      diagnosisCodes: 'E83.30 (Disorder of phosphorus metabolism, unspecified)',
+      details: 'Measures phosphorus levels, often evaluated alongside calcium.'
+  },
+  {
+      cpt: '84153',
+      description: 'Prostate specific antigen (PSA); total',
+      category: 'Chemistry',
+      diagnosisCodes: 'C61 (Malignant neoplasm of prostate), N40.1 (Benign prostatic hyperplasia)',
+      details: 'Screens for and monitors prostate cancer.'
+  },
+  {
+      cpt: '84436',
+      description: 'Thyroxine; total',
+      category: 'Chemistry',
+      diagnosisCodes: 'E03.9 (Hypothyroidism, unspecified)',
+      details: 'Measures the total amount of the thyroid hormone T4 in the blood.'
+  },
+  {
+      cpt: '84439',
+      description: 'Thyroxine; free',
+      category: 'Chemistry',
+      diagnosisCodes: 'E05.90 (Thyrotoxicosis, unspecified), E03.9 (Hypothyroidism)',
+      details: 'Measures the unbound, active form of the thyroid hormone T4.'
   },
   {
       cpt: '84443',
-      description: 'Thyroid Stimulating Hormone (TSH)',
-      diagnosisCodes: 'E03.9, E02, E05.90',
-      details: 'Measures the level of TSH in the blood, which is a primary screening test for thyroid problems. It helps diagnose hypothyroidism (underactive thyroid) and hyperthyroidism (overactive thyroid).'
+      description: 'Thyroid stimulating hormone (TSH)',
+      category: 'Chemistry',
+      diagnosisCodes: 'E03.9 (Hypothyroidism, unspecified), E05.90 (Thyrotoxicosis, unspecified)',
+      details: 'Primary test for evaluating thyroid function.'
   },
   {
-      cpt: 'N/A',
-      description: 'UTI (Urinary Tract Infection) Panel',
-      diagnosisCodes: 'N39.0, R35.0, R30.0',
-      details: 'Molecular testing for the rapid detection of common urinary tract pathogens and associated antibiotic resistance genes. This allows for targeted antibiotic therapy, improving patient outcomes.'
+      cpt: '84450',
+      description: 'Transferase; aspartate amino (AST) (SGOT)',
+      category: 'Chemistry',
+      diagnosisCodes: 'R94.5 (Abnormal results of liver function studies)',
+      details: 'An enzyme often measured as part of a liver function panel.'
   },
   {
-      cpt: 'N/A',
-      description: 'Wound Panel',
-      diagnosisCodes: 'L02.91, L03.119, T79.3XXA',
-      details: 'Identifies a broad range of bacteria and fungi commonly found in acute and chronic wounds. This test helps guide appropriate antimicrobial treatment and manage wound infections effectively.'
+      cpt: '84480',
+      description: 'Triiodothyronine (T3); total',
+      category: 'Chemistry',
+      diagnosisCodes: 'E05.90 (Thyrotoxicosis, unspecified)',
+      details: 'Measures the total amount of the thyroid hormone T3.'
   },
   {
-      cpt: 'N/A',
-      description: 'Nail Fungal Panel',
-      diagnosisCodes: 'B35.1, L60.2',
-      details: 'A molecular test for the detection of dermatophytes and other fungi that cause onychomycosis (nail infections). It offers higher sensitivity and faster results compared to traditional fungal cultures.'
+      cpt: '84481',
+      description: 'Triiodothyronine (T3); free',
+      category: 'Chemistry',
+      diagnosisCodes: 'E05.90 (Thyrotoxicosis, unspecified)',
+      details: 'Measures the unbound, active form of the thyroid hormone T3.'
   },
   {
-      cpt: 'N/A',
-      description: 'STI (Sexually Transmitted Infection) Panel',
-      diagnosisCodes: 'A59.01, A54.9, A63.8',
-      details: 'Provides comprehensive screening for a variety of sexually transmitted pathogens, including Chlamydia, Gonorrhea, Trichomonas, and others, using a single sample. Essential for public health and individual patient management.'
+      cpt: '84550',
+      description: 'Uric acid; blood',
+      category: 'Chemistry',
+      diagnosisCodes: 'M10.9 (Gout, unspecified)',
+      details: 'Measures uric acid levels, primarily for diagnosing and monitoring gout.'
+  },
+  {
+      cpt: '84703',
+      description: 'Gonadotropin, chorionic (hCG); qualitative',
+      category: 'Chemistry',
+      diagnosisCodes: 'Z32.01 (Encounter for pregnancy test, result positive), R82.90 (Abnormal findings in urine)',
+      details: 'A qualitative test to detect the presence of hCG (e.g., in urine).'
+  },
+  {
+      cpt: '85025',
+      description: 'Blood count; complete (CBC), with automated differential WBC count',
+      category: 'Hematology/Coagulation',
+      diagnosisCodes: 'D64.9 (Anemia, unspecified), D72.829 (Elevated white blood cell count)',
+      details: 'A broad screening test for anemia, infection, and other diseases.'
+  },
+  {
+      cpt: '85027',
+      description: 'Blood count; complete (CBC), automated (Hgb, Hct, RBC, WBC and platelet count)',
+      category: 'Hematology/Coagulation',
+      diagnosisCodes: 'Z00.00 (General adult medical exam), D50.9 (Iron deficiency anemia)',
+      details: 'Similar to 85025 but without the white blood cell differential.'
+  },
+  {
+      cpt: '85610',
+      description: 'Prothrombin time (PT)',
+      category: 'Hematology/Coagulation',
+      diagnosisCodes: 'Z79.01 (Long term use of anticoagulants), I48.20 (Chronic atrial fibrillation)',
+      details: 'Measures how long it takes blood to clot; monitors warfarin therapy.'
+  },
+  {
+      cpt: '81001',
+      description: 'Urinalysis, by dip stick or tablet reagent...; automated, with microscopy',
+      category: 'Urinalysis',
+      diagnosisCodes: 'N39.0 (UTI, site not specified), R31.0 (Gross hematuria), R30.0 (Dysuria)',
+      details: 'An automated urinalysis with a microscopic examination of the urine sediment.'
+  },
+  {
+      cpt: '80164',
+      description: 'Depakote (valproic acid)',
+      category: 'Toxicology',
+      diagnosisCodes: 'G40.909 (Epilepsy, unspecified), F31.9 (Bipolar disorder, unspecified)',
+      details: 'Therapeutic drug monitoring for valproic acid.'
+  },
+  {
+      cpt: '80178',
+      description: 'Lithium',
+      category: 'Toxicology',
+      diagnosisCodes: 'F31.9 (Bipolar disorder, unspecified)',
+      details: 'Therapeutic drug monitoring for lithium.'
   },
   {
       cpt: '80307',
-      description: 'Drug Screen, Presumptive, Instrument-Based',
-      diagnosisCodes: 'F11.20, F14.20, Z79.891',
-      details: 'A presumptive drug test using an instrument-based method to detect the presence or absence of drug classes. This is often used for initial screening in clinical or workplace settings.'
+      description: 'Drug test(s), presumptive, any number of drug classes... read by instrument',
+      category: 'Toxicology',
+      diagnosisCodes: 'F19.90 (Other psychoactive substance use), Z02.83 (Encounter for suspected substance abuse)',
+      details: 'A screening test to detect the presence of various classes of drugs via an instrument-read device.'
   },
   {
       cpt: 'G0480',
-      description: 'Drug Test, Definitive, 1-7 Drug Classes',
-      diagnosisCodes: 'F11.20, F19.20, Z91.19',
-      details: 'Definitive (confirmatory) drug testing for 1 to 7 specific drug classes. This test is used to identify the specific drugs or metabolites present when a presumptive screen is positive.'
+      description: 'Drug test(s), definitive... 1-7 drug class(es)',
+      category: 'Toxicology',
+      diagnosisCodes: 'F11.10 (Opioid abuse, uncomplicated), Z79.891 (Long term use of opiate analgesic)',
+      details: 'A specific test that identifies individual drugs within 1-7 classes.'
   },
   {
       cpt: 'G0481',
-      description: 'Drug Test, Definitive, 8-14 Drug Classes',
-      diagnosisCodes: 'F11.20, F19.20, Z91.19',
-      details: 'Definitive (confirmatory) drug testing for 8 to 14 specific drug classes. This provides a more comprehensive analysis for patients on multiple medications or with complex substance use histories.'
+      description: 'Drug test(s), definitive... 8-10 drug class(es)',
+      category: 'Toxicology',
+      diagnosisCodes: 'F11.20 (Opioid dependence), T40.691A (Poisoning by narcotics, accidental)',
+      details: 'A specific test that identifies individual drugs within 8-10 classes.'
   },
   {
       cpt: 'G0482',
-      description: 'Drug Test, Definitive, 15-21 Drug Classes',
-      diagnosisCodes: 'F11.20, F19.20, Z91.19',
-      details: 'Definitive (confirmatory) drug testing for 15 to 21 specific drug classes. Used for extensive drug monitoring in pain management or substance abuse treatment programs.'
+      description: 'Drug test(s), definitive... 11-21 drug class(es)',
+      category: 'Toxicology',
+      diagnosisCodes: 'F11.20 (Opioid dependence), F14.20 (Cocaine dependence)',
+      details: 'A specific test that identifies individual drugs within 11-21 classes.'
   },
   {
       cpt: 'G0483',
-      description: 'Drug Test, Definitive, 22+ Drug Classes',
-      diagnosisCodes: 'F11.20, F19.20, Z91.19',
-      details: 'The most comprehensive definitive drug test, covering 22 or more specific drug classes. This is typically reserved for complex clinical cases requiring extensive toxicological analysis.'
+      description: 'Drug test(s), definitive... 22 or more drug class(es)',
+      category: 'Toxicology',
+      diagnosisCodes: 'F10.20 (Alcohol dependence), F11.23 (Opioid dependence with withdrawal)',
+      details: 'A comprehensive definitive drug test for 22 or more drug classes.'
   },
+  {
+      cpt: '86200',
+      description: 'Cyclic citrullinated peptide (CCP) antibody',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'M05.79 (Rheumatoid arthritis with rheumatoid factor of other site)',
+      details: 'Helps diagnose rheumatoid arthritis.'
+  },
+  {
+      cpt: '86376',
+      description: 'Mycoplasma pneumoniae, antibody',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'J15.7 (Pneumonia due to Mycoplasma pneumoniae)',
+      details: 'Detects antibodies to Mycoplasma pneumoniae.'
+  },
+  {
+      cpt: '86430',
+      description: 'Rheumatoid factor; qualitative',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'M06.9 (Rheumatoid arthritis, unspecified)',
+      details: 'Screens for rheumatoid factor, an autoantibody associated with rheumatoid arthritis.'
+  },
+  {
+      cpt: '86480',
+      description: 'Tuberculosis test, cell mediated immunity...',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z11.1 (Encounter for screening for respiratory tuberculosis), R76.11 (Nonspecific reaction to tuberculin skin test)',
+      details: 'Blood test for tuberculosis (e.g., QuantiFERON-TB Gold).'
+  },
+  {
+      cpt: '86592',
+      description: 'Syphilis test, non-treponemal antibody; qualitative (eg, RPR, VDRL)',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A53.9 (Syphilis, unspecified), Z11.3 (Encounter for screening for infections with a predominantly sexual mode of transmission)',
+      details: 'A non-specific screening test for syphilis.'
+  },
+  {
+      cpt: '86695',
+      description: 'Herpes simplex, non-specific type test, antibody',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A60.00 (Herpesviral infection of unspecified anogenital site), Z11.3',
+      details: 'Detects antibodies to Herpes Simplex Virus.'
+  },
+  {
+      cpt: '86696',
+      description: 'Herpes simplex, type 2',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A60.04 (Herpesviral infection of female genitalia)',
+      details: 'Detects antibodies specifically to Herpes Simplex Virus Type 2.'
+  },
+  {
+      cpt: '86701',
+      description: 'Antibody; HIV-1',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z11.4 (Encounter for screening for human immunodeficiency virus [HIV])',
+      details: 'Detects antibodies to HIV-1.'
+  },
+  {
+      cpt: '86702',
+      description: 'Antibody; HIV-2',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z11.4 (Encounter for screening for human immunodeficiency virus [HIV])',
+      details: 'Detects antibodies to HIV-2.'
+  },
+  {
+      cpt: '86708',
+      description: 'Antibody; Hepatitis B core antibody (HBcAb), IgG and IgM',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z22.51 (Carrier of viral hepatitis B), B18.1 (Chronic viral hepatitis B)',
+      details: 'Detects previous or ongoing infection with Hepatitis B virus.'
+  },
+  {
+      cpt: '86800',
+      description: 'Thyroglobulin antibody',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'E06.3 (Autoimmune thyroiditis)',
+      details: 'Detects antibodies against thyroglobulin, often seen in autoimmune thyroid disease.'
+  },
+  {
+      cpt: '87340',
+      description: 'Infectious agent antigen detection...; hepatitis B surface antigen (HBsAg)',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z11.59 (Encounter for screening for other viral diseases), B18.1 (Chronic viral hepatitis B)',
+      details: 'Screens for the presence of Hepatitis B virus.'
+  },
+  {
+      cpt: '87389',
+      description: 'Infectious agent antigen detection... HIV-1 antigen(s), with HIV-1 and HIV-2 antibodies',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z11.4 (Encounter for screening for human immunodeficiency virus [HIV])',
+      details: '4th generation HIV test that detects both the p24 antigen and antibodies.'
+  },
+  {
+      cpt: '87426',
+      description: 'Infectious agent antigen detection... Shiga-like toxin',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A04.9 (Bacterial intestinal infection, unspecified), R19.7 (Diarrhea)',
+      details: 'Detects Shiga toxin, indicating an infection with E. coli O157:H7 or other Shiga toxin-producing bacteria.'
+  },
+  {
+      cpt: '87491',
+      description: 'Infectious agent detection... Chlamydia trachomatis, amplified probe technique',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A56.00 (Chlamydial infection of lower genitourinary tract, unspecified)',
+      details: 'Detects the genetic material of Chlamydia trachomatis.'
+  },
+  {
+      cpt: '87522',
+      description: 'Infectious agent detection... hepatitis C, quantitative',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'B18.2 (Chronic viral hepatitis C)',
+      details: 'Measures the amount of Hepatitis C virus in the blood (viral load).'
+  },
+  {
+      cpt: '87556',
+      description: 'Infectious agent detection... Mycoplasma genitalium, amplified probe technique',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A59.02 (Trichomonal prostatitis)',
+      details: 'Detects the genetic material of Mycoplasma genitalium.'
+  },
+  {
+      cpt: '87591',
+      description: 'Infectious agent detection... Neisseria gonorrhoeae, amplified probe technique',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'A54.00 (Gonococcal infection of lower genitourinary tract without abscess)',
+      details: 'Detects the genetic material of Neisseria gonorrhoeae.'
+  },
+  {
+      cpt: '87635',
+      description: 'Infectious agent detection... respiratory virus (eg, adenovirus, influenza virus...)',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'J06.9 (Acute upper respiratory infection, unspecified), R05 (Cough)',
+      details: 'Multiplex PCR test for several common respiratory viruses.'
+  },
+  {
+      cpt: '87636',
+      description: 'Infectious agent detection... SARS-CoV-2 and influenza virus types A and B',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'J11.1 (Influenza due to unidentified influenza virus), Z20.822 (Contact with and (suspected) exposure to COVID-19)',
+      details: 'A combination test for COVID-19 and Influenza A/B.'
+  },
+  {
+      cpt: '87637',
+      description: 'Infectious agent detection... SARS-CoV-2, influenza A/B, and RSV, multiplex',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'J12.1 (Pneumonia due to respiratory syncytial virus)',
+      details: 'A combination test for COVID-19, Influenza A/B, and RSV.'
+  },
+  {
+      cpt: '87804',
+      description: 'Infectious agent antigen detection... Influenza',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'J11.1 (Influenza due to unidentified influenza virus)',
+      details: 'Rapid antigen test for influenza.'
+  },
+  {
+      cpt: 'U0004',
+      description: '2019-nCoV Coronavirus, SARS-CoV-2 by PCR, high throughput',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z20.822 (Contact with and (suspected) exposure to COVID-19)',
+      details: 'High-throughput laboratory PCR test for SARS-CoV-2.'
+  },
+  {
+      cpt: 'U0005',
+      description: 'Infectious agent detection... SARS-CoV-2, non-CDC lab, 24-48 hours',
+      category: 'Infectious Disease/Microbiology',
+      diagnosisCodes: 'Z20.822 (Contact with and (suspected) exposure to COVID-19)',
+      details: 'Used for certain non-CDC developed COVID-19 tests with specific turnaround times.'
+  },
+  {
+      cpt: '81210',
+      description: 'BRCA1, BRCA2... full sequence analysis and common duplication/deletion',
+      category: 'Molecular Pathology',
+      diagnosisCodes: 'Z15.01 (Genetic susceptibility to malignant neoplasm of breast)',
+      details: 'Assesses hereditary risk for breast, ovarian, and other cancers.'
+  },
+  {
+      cpt: '81435',
+      description: 'Hereditary colon cancer syndromes... genomic sequence analysis panel',
+      category: 'Molecular Pathology',
+      diagnosisCodes: 'Z15.03 (Genetic susceptibility to malignant neoplasm of colon)',
+      details: 'Panel to test for genetic syndromes that increase colon cancer risk.'
+  },
+  {
+      cpt: '81479',
+      description: 'Unlisted molecular pathology procedure',
+      category: 'Molecular Pathology',
+      diagnosisCodes: 'C80.1 (Disseminated malignant neoplasm, unspecified)',
+      details: 'Used for molecular tests that do not have a specific CPT code.'
+  },
+  {
+      cpt: '87631',
+      description: 'Infectious agent detection... respiratory syncytial virus, amplified probe',
+      category: 'Molecular Pathology',
+      diagnosisCodes: 'J21.0 (Acute bronchiolitis due to respiratory syncytial virus)',
+      details: 'Detects the genetic material of Respiratory Syncytial Virus (RSV).'
+  },
+  {
+      cpt: '88305',
+      description: 'Level IV - Surgical pathology, gross and microscopic examination',
+      category: 'Anatomic Pathology',
+      diagnosisCodes: 'D22.5 (Melanocytic nevi of trunk), K63.5 (Polyp of colon), N84.1 (Polyp of cervix uteri)',
+      details: 'Pathologic examination of tissue, such as a colon polyp or skin biopsy.'
+  },
+  {
+      cpt: '36415',
+      description: 'Collection of venous blood by venipuncture',
+      category: 'Procedure/Other',
+      diagnosisCodes: 'Z00.00 (General adult medical exam), Z01.812 (Preprocedural lab exam)',
+      details: 'Procedure code for drawing blood.'
+  },
+  {
+      cpt: 'G2023',
+      description: 'Specimen collection for SARS-CoV-2 (COVID-19)',
+      category: 'Procedure/Other',
+      diagnosisCodes: 'Z20.822 (Contact with and (suspected) exposure to COVID-19)',
+      details: 'HCPCS code for collecting a COVID-19 specimen.'
+  },
+  {
+      cpt: 'P9604',
+      description: 'Catheterization for collection of specimen(s)',
+      category: 'Procedure/Other',
+      diagnosisCodes: 'R30.0 (Dysuria), N39.0 (UTI, site not specified)',
+      details: 'HCPCS code for collecting a specimen via catheter.'
+  },
+  {
+      cpt: 'K1034',
+      description: 'Saliva-based test for the detection of HIV',
+      category: 'Procedure/Other',
+      diagnosisCodes: 'Z11.4 (Encounter for screening for HIV)',
+      details: 'HCPCS code for a saliva-based HIV test.'
+  }
 ];
 
 // --- CPT Code Finder Component ---
@@ -3165,4 +3599,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
