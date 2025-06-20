@@ -3147,6 +3147,7 @@ Example:
       </div>
     </div>
   );
+
 };
 
 // --- ContactUsModal Component ---
@@ -3380,6 +3381,7 @@ const Dashboard = () => {
   const { currentUser, logout } = useAuth();
   const [currentPage, setCurrentPage] = useState('patient-portal');
   const [showContactModal, setShowContactModal] = useState(false); // New state for Contact Us modal
+  const [showCptFinder, setShowCptFinder] = useState(false); // State for CPT Finder Modal
 
   // Define admin users with full access to patient and physician portals
   const fullAccessAdminsUsernames = ["SatishD", "AshlieT", "MinaK", "JayM", "AghaA"];
@@ -3507,6 +3509,14 @@ const Dashboard = () => {
             </button>
           )}
 
+          {/* New CPT Code Finder Button */}
+          <button
+            onClick={() => setShowCptFinder(true)}
+            className="px-4 py-3 text-left text-lg font-medium rounded-md transition-colors duration-200 text-gray-700 hover:bg-gray-100"
+          >
+            CPT Code Finder
+          </button>
+
           {/* New Contact Us Button */}
           <button
             onClick={() => setShowContactModal(true)}
@@ -3528,6 +3538,8 @@ const Dashboard = () => {
 
       {/* Render ContactUsModal */}
       <ContactUsModal isOpen={showContactModal} onClose={() => setShowContactModal(false)} />
+      {/* Render CPTCodeFinder as a modal */}
+      <CptCodeFinder isOpen={showCptFinder} onClose={() => setShowCptFinder(false)} />
     </div>
   );
 }
