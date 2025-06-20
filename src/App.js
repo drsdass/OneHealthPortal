@@ -1458,7 +1458,7 @@ const cptCodeData = [
 ];
 
 // --- CPT Code Finder Component ---
-const CptCodeFinder = () => {
+const CptCodeFinder = ({ isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -1478,35 +1478,49 @@ const CptCodeFinder = () => {
     setSearchResults(results);
   };
 
-  return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-md bg-gray-50">
-      <h3 className="text-xl font-semibold text-gray-700 mb-4">Diagnostic Testing CPT Code Finder</h3>
-      <div className="mb-4">
-        <label htmlFor="cpt-search" className="block text-sm font-medium text-gray-700">
-          Search by CPT Code or Description
-        </label>
-        <input
-          type="text"
-          id="cpt-search"
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="e.g., 80053 or Comprehensive"
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-      </div>
+  if (!isOpen) return null;
 
-      <div className="space-y-4">
-        {searchResults.length > 0 ? (
-          searchResults.map(item => (
-            <div key={item.cpt} className="p-4 border rounded-md bg-white shadow-sm">
-              <h4 className="text-lg font-bold text-indigo-700">{item.cpt} - {item.description}</h4>
-              <p className="mt-1 text-sm text-gray-600"><span className="font-semibold">Associated Diagnosis Codes:</span> {item.diagnosisCodes}</p>
-              <p className="mt-1 text-sm text-gray-800">{item.details}</p>
-            </div>
-          ))
-        ) : (
-          searchTerm && <p className="text-gray-500">No results found for "{searchTerm}".</p>
-        )}
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 p-4">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-4xl mx-auto relative transform transition-all sm:my-8 sm:w-full h-[90vh] flex flex-col">
+        <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">CPT Code Finder</h3>
+        <div className="mb-4">
+          <label htmlFor="cpt-search" className="block text-sm font-medium text-gray-700">
+            Search by CPT Code or Description
+          </label>
+          <input
+            type="text"
+            id="cpt-search"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="e.g., 80053 or Comprehensive"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <div className="flex-grow overflow-y-auto pr-2">
+          <div className="space-y-4">
+            {searchResults.length > 0 ? (
+              searchResults.map((item, index) => (
+                <div key={`${item.cpt}-${index}`} className="p-4 border rounded-md bg-white shadow-sm">
+                  <h4 className="text-lg font-bold text-indigo-700">{item.cpt} - {item.description}</h4>
+                  <p className="mt-1 text-sm text-gray-600"><span className="font-semibold">Associated Diagnosis Codes:</span> {item.diagnosisCodes}</p>
+                  <p className="mt-1 text-sm text-gray-800">{item.details}</p>
+                </div>
+              ))
+            ) : (
+              searchTerm && <p className="text-gray-500">No results found for "{searchTerm}".</p>
+            )}
+          </div>
+        </div>
+        <div className="flex justify-end space-x-3 mt-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -3147,7 +3161,6 @@ Example:
       </div>
     </div>
   );
-
 };
 
 // --- ContactUsModal Component ---
