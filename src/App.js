@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
@@ -266,6 +265,12 @@ const initialHardcodedUsers = [
     isFullAccessAdmin: false,
     entities: {},
   },
+];
+
+const initialHardcodedSalesData = [
+    { month: 'January 2025', location: 'Demo Location A', reimbursement: 5000, cogs: 2000, net: 3000, commission: 300, entity: 'First Bio Lab', associatedrepname: 'Demo Rep', username: 'SatishD' },
+    { month: 'February 2025', location: 'Demo Location B', reimbursement: 7500, cogs: 3000, net: 4500, commission: 450, entity: 'AIM Laboratories LLC', associatedrepname: 'Demo Rep 2', username: 'JayM' },
+    { month: 'March 2025', location: 'Demo Location A', reimbursement: 6000, cogs: 2500, net: 3500, commission: 350, entity: 'First Bio Lab', associatedrepname: 'Demo Rep', username: 'SatishD' },
 ];
 
 // --- Firebase Initialization (Global Configuration Variables) ---
@@ -750,51 +755,9 @@ const PatientPortal = () => {
   );
 };
 
-// --- PhysicianProvider ---
-const PhysicianProvider = () => {
-  return (
-    <div className="p-8 bg-white rounded-lg shadow-md w-full min-h-[500px]"> {/* Standardized height/width */}
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Physician/Provider Dashboard</h2>
-      <p className="text-gray-700 text-lg">
-        This portal provides tools and resources for physicians and healthcare providers.
-      </p>
-      <div className="mt-6 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Patient Records:</h3>
-        <p className="text-gray-600">Access and manage patient health records securely.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          View Patient List
-        </button>
-      </div>
-      <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Appointment Schedule:</h3>
-        <p className="text-gray-600">View and manage your daily and weekly appointments.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          Open Calendar
-        </button>
-      </div>
-      <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Prescription Management:</h3>
-        <p className="text-gray-600">Digitally prescribe and track medications.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          E-Prescribe
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// This function will be universal for normalizing entity names for both Firestore paths and PDF file paths
+// --- getNormalizedEntityName ---
 const getNormalizedEntityName = (entityName) => {
   if (!entityName) return '';
-  const normalized = String(entityName).trim().toLowerCase();
-
-  // Specific mappings for known entities to handle legacy paths or inconsistencies
-  if (normalized === "aim laboratories llc" || normalized === "aim laboratories") {
-    return "AIMLaboratories";
-  }
-  
-  // Default: remove all non-alphanumeric characters.
-  // This ensures a consistent string without spaces or special chars for Firebase IDs and file names.
   return String(entityName).replace(/[^a-zA-Z0-9]/g, '');
 };
 
@@ -1764,8 +1727,6 @@ const SalesMarketing = () => {
               </a>
             </div>
         </div>
-        
-        {/* CPT Code Finder is now a modal, so it's removed from here */}
       </div>
     </div>
   );
@@ -1988,7 +1949,7 @@ const MonthlyBonusReport = ({ entity }) => {
                 </button>
                 <button
                     onClick={downloadCsv}
-                    className="mt-4 ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+                    className="mt-4 ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-200 ease-in-out transform hover:scale-105"
                 >
                     Download Monthly Bonus Report (CSV)
                 </button>
@@ -2692,15 +2653,15 @@ const AdminPage = () => {
 
 
         const row = {
-          month: recordFields[monthIndex],
-          location: recordFields[locationIndex],
+          month: recordFields[monthIndex] || '',
+          location: recordFields[locationIndex] || '',
           reimbursement: parseFloat(recordFields[reimbursementIndex]) || 0,
           cogs: parseFloat(recordFields[cogsIndex]) || 0,
           net: parseFloat(recordFields[netIndex]) || 0,
           commission: parseFloat(recordFields[commissionIndex]) || 0,
-          entity: recordFields[entityIndex],
-          associatedrepname: recordFields[associatedRepNameIndex],
-          username: recordFields[usernameIndex],
+          entity: recordFields[entityIndex] || '',
+          associatedrepname: recordFields[associatedRepNameIndex] || '',
+          username: recordFields[usernameIndex] || '',
         };
         records.push(row);
     });
@@ -2882,10 +2843,10 @@ const AdminPage = () => {
         }
 
         const row = {};
-        row.Month = recordFields[monthIndex];
+        row.Month = recordFields[monthIndex] || '';
         row.BonusAmount = parseFloat(recordFields[bonusAmountIndex]) || 0;
-        row.Performance = recordFields[performanceIndex];
-        row.Participants = recordFields[participantsIndex];
+        row.Performance = recordFields[performanceIndex] || '';
+        row.Participants = recordFields[participantsIndex] || '';
         
         records.push(row);
     });
