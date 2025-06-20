@@ -410,17 +410,19 @@ const AuthProvider = ({ children }) => {
           const q = query(usersColRef);
           const querySnapshot = await getDocs(q);
           const fetchedUsers = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setAllUsersFromFirestore(fetchedUsers);
-          console.log("All users fetched from Firestore:", fetchedUsers);
+          if (fetchedUsers.length > 0) {
+            setAllUsersFromFirestore(fetchedUsers);
+            console.log("All users successfully fetched from Firestore:", fetchedUsers);
+          } else {
+            console.log("No users found in Firestore. The app will use the hardcoded user list for login.");
+          }
         } catch (error) {
-          console.error("Error fetching or seeding users from Firestore:", error);
-          setErrorMessage("Could not load user data from the database. The application may fall back to a default user list.");
-          setShowModal(true);
+          console.error("Error fetching users from Firestore (falling back to hardcoded list):", error);
         }
       };
       fetchAllUsers();
     }
-  }, [db, isAuthReady, auth, currentAppId]); // Re-run when db, auth, or authReady state changes
+  }, [db, isAuthReady, auth, currentAppId]);
 
 
   const login = (credentials, loginType) => {
@@ -2383,7 +2385,7 @@ const UserManagement = () => {
                   </div>
                   <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" value={newUserData.password} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
+                    <input type="password" name="password" id="edit-password" value={newUserData.password} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" />
                   </div>
                 </>
               )}
