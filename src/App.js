@@ -1536,7 +1536,6 @@ const SalesMarketing = () => {
   const [availableEntities, setAvailableEntities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTool, setActiveTool] = useState(''); // State to toggle tools
 
   // State for filters
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
