@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, query, getDocs, addDoc, setDoc, deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import PhysicianProvider from './components/PhysicianProvider';
 
 
 // --- Hardcoded User Data (Fallback/Initial Seeding) ---
@@ -749,51 +750,9 @@ const PatientPortal = () => {
   );
 };
 
-// --- PhysicianProvider ---
-const PhysicianProvider = () => {
-  return (
-    <div className="p-8 bg-white rounded-lg shadow-md w-full min-h-[500px]"> {/* Standardized height/width */}
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Physician/Provider Dashboard</h2>
-      <p className="text-gray-700 text-lg">
-        This portal provides tools and resources for physicians and healthcare providers.
-      </p>
-      <div className="mt-6 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Patient Records:</h3>
-        <p className="text-gray-600">Access and manage patient health records securely.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          View Patient List
-        </button>
-      </div>
-      <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Appointment Schedule:</h3>
-        <p className="text-gray-600">View and manage your daily and weekly appointments.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          Open Calendar
-        </button>
-      </div>
-      <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">Prescription Management:</h3>
-        <p className="text-gray-600">Digitally prescribe and track medications.</p>
-        <button className="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-          E-Prescribe
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// This function will be universal for normalizing entity names for both Firestore paths and PDF file paths
+// --- getNormalizedEntityName ---
 const getNormalizedEntityName = (entityName) => {
   if (!entityName) return '';
-  const normalized = String(entityName).trim().toLowerCase();
-
-  // Specific mappings for known entities to handle legacy paths or inconsistencies
-  if (normalized === "aim laboratories llc" || normalized === "aim laboratories") {
-    return "AIMLaboratories";
-  }
-  
-  // Default: remove all non-alphanumeric characters.
-  // This ensures a consistent string without spaces or special chars for Firebase IDs and file names.
   return String(entityName).replace(/[^a-zA-Z0-9]/g, '');
 };
 
@@ -1763,8 +1722,6 @@ const SalesMarketing = () => {
               </a>
             </div>
         </div>
-        
-        {/* CPT Code Finder is now a modal, so it's removed from here */}
       </div>
     </div>
   );
@@ -2691,15 +2648,15 @@ const AdminPage = () => {
 
 
         const row = {
-          month: recordFields[monthIndex],
-          location: recordFields[locationIndex],
+          month: recordFields[monthIndex] || '',
+          location: recordFields[locationIndex] || '',
           reimbursement: parseFloat(recordFields[reimbursementIndex]) || 0,
           cogs: parseFloat(recordFields[cogsIndex]) || 0,
           net: parseFloat(recordFields[netIndex]) || 0,
           commission: parseFloat(recordFields[commissionIndex]) || 0,
-          entity: recordFields[entityIndex],
-          associatedrepname: recordFields[associatedRepNameIndex],
-          username: recordFields[usernameIndex],
+          entity: recordFields[entityIndex] || '',
+          associatedrepname: recordFields[associatedRepNameIndex] || '',
+          username: recordFields[usernameIndex] || '',
         };
         records.push(row);
     });
@@ -2881,10 +2838,10 @@ const AdminPage = () => {
         }
 
         const row = {};
-        row.Month = recordFields[monthIndex];
+        row.Month = recordFields[monthIndex] || '';
         row.BonusAmount = parseFloat(recordFields[bonusAmountIndex]) || 0;
-        row.Performance = recordFields[performanceIndex];
-        row.Participants = recordFields[participantsIndex];
+        row.Performance = recordFields[performanceIndex] || '';
+        row.Participants = recordFields[participantsIndex] || '';
         
         records.push(row);
     });
