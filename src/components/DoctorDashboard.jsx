@@ -1,9 +1,9 @@
-// src/components/PhysicianProvider.js
+// src/components/DoctorDashboardComponent.jsx
 import React from 'react';
 
-const PhysicianProvider = () => {
+const DoctorDashboardComponent = () => { // <--- Changed name here
   return (
-    <div className="p-8 bg-white rounded-lg shadow-md w-full min-h-[500px]"> {/* Standardized height/width */}
+    <div className="p-8 bg-white rounded-lg shadow-md w-full min-h-[500px]">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Physician/Provider Dashboard</h2>
       <p className="text-gray-700 text-lg">
         This portal provides tools and resources for physicians and healthcare providers.
@@ -33,4 +33,4 @@ const PhysicianProvider = () => {
   );
 };
 
-export default PhysicianProvider;
+export default DoctorDashboardComponent; // <--- Changed name here
