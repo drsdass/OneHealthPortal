@@ -3384,7 +3384,7 @@ const Dashboard = () => {
       case 'patient-portal':
         return <PatientPortal />;
       case 'physician-provider':
-        return <PhysicianProvider />;
+        return <DoctorDashboardComponent />;
       case 'sales-marketing':
         return <SalesMarketing />;
       case 'admin':
